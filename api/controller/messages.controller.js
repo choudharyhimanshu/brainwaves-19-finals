@@ -166,7 +166,9 @@ exports.getSgMessageByRef = function (request, response) {
         if (error) {
             response.json(error);
         }
-        response.json(message);
+        setTimeout(function () {
+            response.json(message);
+        }, 1000);
     });
 };
 
@@ -175,6 +177,8 @@ exports.getClientMessageByRef = function (request, response) {
         if (error) {
             response.json(error);
         }
-        response.json(message);
+        setTimeout(function () {
+            response.json(message);
+        }, 1000);
     });
 };

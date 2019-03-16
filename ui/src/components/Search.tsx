@@ -19,6 +19,7 @@ import {toast} from 'react-toastify';
 import {STATUSES} from '../constants';
 import {DatesRangeInput} from 'semantic-ui-calendar-react';
 import StatusCell from "./StatusCell";
+import CompareModal from "./CompareModal";
 
 export interface ISearchRequest {
     ref: string;
@@ -32,6 +33,7 @@ export interface ISearchState {
     searchResults: SGMessage[];
     countMatched: number;
     countClosefit: number;
+    selectedResult: SGMessage | undefined;
 }
 
 class Search extends Component<{}, ISearchState> {
@@ -48,7 +50,8 @@ class Search extends Component<{}, ISearchState> {
             },
             searchResults: [],
             countMatched: 0,
-            countClosefit: 0
+            countClosefit: 0,
+            selectedResult: undefined
         };
 
         this.handleRefInputChange = this.handleRefInputChange.bind(this);
@@ -56,6 +59,7 @@ class Search extends Component<{}, ISearchState> {
         this.handleClearButtonClick = this.handleClearButtonClick.bind(this);
         this.handleStatusSelectChange = this.handleStatusSelectChange.bind(this);
         this.handleTradeRangeChange = this.handleTradeRangeChange.bind(this);
+        this.onCompareModalClose = this.onCompareModalClose.bind(this);
     }
 
     handleRefInputChange(value: string): void {
@@ -104,6 +108,18 @@ class Search extends Component<{}, ISearchState> {
         });
     }
 
+    handleResultDoubleClick(result: SGMessage): void {
+        this.setState({
+            selectedResult: result
+        });
+    }
+
+    onCompareModalClose(): void {
+        this.setState({
+            selectedResult: undefined
+        });
+    }
+
     private search(): void {
         this.setState({
             isSearching: true
@@ -129,10 +145,11 @@ class Search extends Component<{}, ISearchState> {
     }
 
     render() {
-        const {isSearching, searchRequest, searchResults, countMatched, countClosefit} = this.state;
+        const {isSearching, searchRequest, searchResults, countMatched, countClosefit, selectedResult} = this.state;
 
         return(
             <Container style={{paddingTop: 10, paddingBottom: 50}}>
+                { selectedResult && <CompareModal onModalClose={this.onCompareModalClose} sgRef={selectedResult.Key_20} clientRef={selectedResult.clientRef}/> }
                 <Segment>
                     <Form>
                         <Form.Group widths='equal'>
@@ -157,7 +174,7 @@ class Search extends Component<{}, ISearchState> {
                         </div>
                     </Form>
                 </Segment>
-                <Segment loading={isSearching} basic>
+                <Segment disabled={isSearching} basic>
                     <Statistic.Group widths='four' size='mini'>
                         <Statistic>
                             <Statistic.Value>{searchResults.length}</Statistic.Value>
@@ -199,7 +216,7 @@ class Search extends Component<{}, ISearchState> {
                             }
                             {
                                 searchResults.map(result =>
-                                    <Table.Row key={result.Key_20}>
+                                    <Table.Row key={result.Key_20} onDoubleClick={() => {this.handleResultDoubleClick(result)}}>
                                         <Table.Cell>{result.Key_20}</Table.Cell>
                                         <Table.Cell>{result.Key_30T}</Table.Cell>
                                         <Table.Cell>{result.Key_82A}</Table.Cell>

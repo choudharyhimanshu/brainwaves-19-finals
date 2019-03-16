@@ -1,7 +1,6 @@
 
 let router = require('express').Router();
 
-// const stockController = require('./controller/stock.controller');
 const messagesController = require('./controller/messages.controller');
 
 router.get('/', function (request, response) {
