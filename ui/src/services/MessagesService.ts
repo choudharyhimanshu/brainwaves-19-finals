@@ -14,6 +14,7 @@ class MessagesService {
         const url = new URL(`${this.apiBase}/search`);
         url.searchParams.append('Key_20', searchRequest.ref);
         url.searchParams.append('Key_30T', searchRequest.tradeDateRange);
+        url.searchParams.append('status', searchRequest.status);
 
         const response = await fetch(url.href);
 

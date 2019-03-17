@@ -156,7 +156,11 @@ exports.searchMessages = function (request, response) {
                     }
                 }
             }
-            response.json(messages);
+            if (request.query.status) {
+                response.json(messages.filter(message => message.status === request.query.status));
+            } else {
+                response.json(messages);
+            }
         });
     });
 };

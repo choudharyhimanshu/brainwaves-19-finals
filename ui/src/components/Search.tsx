@@ -72,8 +72,7 @@ class Search extends Component<{}, ISearchState> {
         });
     }
 
-    handleStatusSelectChange(value: string): void {
-        console.log(value);
+    handleStatusSelectChange(value: any): void {
         this.setState(prevState => {
             const searchReq = prevState.searchRequest;
             searchReq.status = value;
@@ -154,7 +153,7 @@ class Search extends Component<{}, ISearchState> {
                     <Form>
                         <Form.Group widths='equal'>
                             <Form.Field control={Input} label='Reference' placeholder='06997FXJ1343375A..' value={searchRequest.ref} onChange={(event: any) => this.handleRefInputChange(event.target.value)} />
-                            <Form.Field control={Select} label='Status' placeholder='06997FXJ1343375A..' value={searchRequest.status} onChange={(event: any) => this.handleStatusSelectChange(event.target.value)} options={STATUSES} />
+                            <Form.Field control={Select} label='Status' placeholder='06997FXJ1343375A..' value={searchRequest.status} onChange={(event: any, data: any) => this.handleStatusSelectChange(data.value)} options={STATUSES} />
                             <Form.Field>
                                 <label>Trade Date</label>
                                 <DatesRangeInput
